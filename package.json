@@ -3,22 +3,28 @@
   "version": "1.0.0",
   "description": "Convert cron expressions into readable phrases",
   "main": "dist/index.js",
+  "bin": {
+    "cron-explain": "dist/cli.js"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "dev:cli": "ts-node src/cli.ts"
   },
   "keywords": [
     "cron",
     "scheduler",
     "typescript",
     "portuguese",
-    "i18n"
+    "i18n",
+    "cli",
+    "command-line"
   ],
   "author": "jose@noopico.com",
   "license": "MIT",
