@@ -1,7 +1,7 @@
 {
   "name": "cron-explain",
   "version": "1.0.0",
-  "description": "Convert cron expressions into readable phrases in Portuguese",
+  "description": "Convert cron expressions into readable phrases",
   "main": "dist/index.js",
   "engines": {
     "node": ">=18.0.0"
@@ -17,7 +17,8 @@
     "cron",
     "scheduler",
     "typescript",
-    "portuguese"
+    "portuguese",
+    "i18n"
   ],
   "author": "jose@noopico.com",
   "license": "MIT",
