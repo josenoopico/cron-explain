@@ -1,0 +1,30 @@
+
+# Pasta AI
+.ai/
+
+# Arquivos de desenvolvimento
+src/
+tests/
+*.test.js
+*.test.ts
+
+# Configurações
+tsconfig.json
+jest.config.js
+.eslintrc.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependências
+node_modules/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
