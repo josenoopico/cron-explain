@@ -13,25 +13,29 @@ Convert cron expressions into readable phrases in Portuguese (pt-BR) and other s
 
 Transform 5-field cron expressions (minute hour day-of-month month day-of-week) into easy-to-understand descriptions of when scheduled tasks will run.
 
+**Available as both a library and command-line tool!**
+
 ## 🚀 Features
 
-- Converts cron expressions to text in Portuguese
-- Multi-language support (pt-BR, en-US, es-ES, fr-FR)
-- Interpretation of all cron fields (minute, hour, day of month, month, day of week)
-- Simple and intuitive interface
+- ✅ **Dual functionality**: Use as library or CLI tool
+- ✅ **Command-line interface**: Direct terminal usage
+- ✅ **Library integration**: Import in your projects
+- ✅ **Multi-language support**: pt-BR, en-US, es-ES, fr-FR
+- ✅ **Complete cron parsing**: All 5 fields supported
+- ✅ **TypeScript support**: Full type definitions
+- ✅ **Error handling**: Helpful error messages
+- ✅ **Zero dependencies**: Lightweight and fast
 
 ## 📦 Installation
 
 Requirements: Node.js >= 18
 
-- npm:
-    - Install: `npm install cron-explain`
-    - Tests (optional): `npm test`
-    - Build (optional): `npm run build`
-- yarn:
-    - Install: `yarn add cron-explain`
-- pnpm:
-    - Install: `pnpm add cron-explain`
+### 🔧 As Library (for projects)
+- npm: `npm install cron-explain`
+- yarn: `yarn add cron-explain`
+- pnpm: `pnpm add cron-explain`
+
+### 🌍 As CLI Tool (global installation)
 
 ## 📥 Import and Basic Usage
 
