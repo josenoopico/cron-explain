@@ -1,6 +1,10 @@
 /**
- * Converte expressões cron em frases descritivas em português
+ * Convert cron expressions into readable phrases in multiple languages
  */
+
+import { CronTranslations, SupportedLanguage } from './i18n';
+import { getTranslations, interpolate } from './i18n/loader';
+import { defaultConfig, TIME_PERIODS } from './config';
 
 interface CronFields {
   minute: string;
@@ -10,54 +14,34 @@ interface CronFields {
   dayOfWeek: string;
 }
 
-const DAYS_OF_WEEK: Record<string, string> = {
-  '0': 'domingo',
-  '1': 'segunda-feira',
-  '2': 'terça-feira',
-  '3': 'quarta-feira',
-  '4': 'quinta-feira',
-  '5': 'sexta-feira',
-  '6': 'sábado',
-  '7': 'domingo' // Alguns sistemas usam 7 para domingo
-};
-
-const MONTHS: Record<string, string> = {
-  '1': 'janeiro',
-  '2': 'fevereiro',
-  '3': 'março',
-  '4': 'abril',
-  '5': 'maio',
-  '6': 'junho',
-  '7': 'julho',
-  '8': 'agosto',
-  '9': 'setembro',
-  '10': 'outubro',
-  '11': 'novembro',
-  '12': 'dezembro'
-};
-
 /**
- * Converte uma expressão cron em uma frase descritiva em português
- * @param cronExpression - Expressão cron no formato "minuto hora dia mês dia-semana"
- * @returns Frase descritiva em português
+ * Convert a cron expression into a descriptive phrase
+ * @param cronExpression - Cron expression in format "minute hour day month day-of-week"
+ * @param language - Target language for the description
+ * @returns Descriptive phrase in the specified language
  */
-export function explainCron(cronExpression: string): string {
+export function explainCron(
+  cronExpression: string, 
+  language: SupportedLanguage = defaultConfig.defaultLanguage
+): string {
   try {
     const fields = parseCronExpression(cronExpression);
-    return buildDescription(fields);
+    const translations = getTranslations(language);
+    return buildDescription(fields, translations);
   } catch (error) {
-    return `Erro ao interpretar a expressão cron: ${cronExpression}`;
+    const translations = getTranslations(language);
+    return `${translations.phrases.errorInterpreting}: ${cronExpression}`;
   }
 }
 
 /**
- * Faz o parse da expressão cron em campos individuais
+ * Parse cron expression into individual fields
  */
 function parseCronExpression(cronExpression: string): CronFields {
   const parts = cronExpression.trim().split(/\s+/);
 
   if (parts.length !== 5) {
-    throw new Error('Expressão cron deve ter exatamente 5 campos');
+    throw new Error('Cron expression must have exactly 5 fields');
   }
 
   return {
@@ -70,24 +54,24 @@ function parseCronExpression(cronExpression: string): CronFields {
 }
 
 /**
- * Constrói a descrição em português baseada nos campos da expressão cron
+ * Build description based on cron fields using translations
  */
-function buildDescription(fields: CronFields): string {
-  let description = 'Executa ';
+function buildDescription(fields: CronFields, translations: CronTranslations): string {
+  let description = `${translations.phrases.executes} `;
 
-  // Determinar a frequência baseada nos campos
+  // Determine frequency based on fields
   if (fields.dayOfWeek !== '*') {
-    description += buildDayOfWeekDescription(fields.dayOfWeek);
+    description += buildDayOfWeekDescription(fields.dayOfWeek, translations);
   } else if (fields.dayOfMonth !== '*') {
-    description += buildDayOfMonthDescription(fields.dayOfMonth);
+    description += buildDayOfMonthDescription(fields.dayOfMonth, translations);
   } else if (fields.month !== '*') {
-    description += buildMonthDescription(fields.month);
+    description += buildMonthDescription(fields.month, translations);
   } else {
-    description += 'todos os dias';
+    description += translations.phrases.everyday;
   }
 
-  // Adicionar informações de horário
-  const timeDescription = buildTimeDescription(fields.minute, fields.hour);
+  // Add time information
+  const timeDescription = buildTimeDescription(fields.minute, fields.hour, translations);
   if (timeDescription) {
     description += ` ${timeDescription}`;
   }
@@ -96,89 +80,116 @@ function buildDescription(fields: CronFields): string {
 }
 
 /**
- * Constrói a descrição para dias da semana
+ * Build description for days of week
  */
-function buildDayOfWeekDescription(dayOfWeek: string): string {
+function buildDayOfWeekDescription(dayOfWeek: string, translations: CronTranslations): string {
   if (dayOfWeek === '*') {
-    return 'todos os dias';
+    return translations.phrases.everyday;
   }
 
-  if (DAYS_OF_WEEK[dayOfWeek]) {
-    return `toda ${DAYS_OF_WEEK[dayOfWeek]}`;
+  if (translations.daysOfWeek[dayOfWeek]) {
+    return `${translations.phrases.every} ${translations.daysOfWeek[dayOfWeek]}`;
   }
 
-  // Para múltiplos dias ou intervalos
+  // For multiple days or ranges
   if (dayOfWeek.includes(',')) {
-    const days = dayOfWeek.split(',').map(day => DAYS_OF_WEEK[day.trim()]).filter(Boolean);
+    const days = dayOfWeek.split(',')
+      .map(day => translations.daysOfWeek[day.trim()])
+      .filter(Boolean);
     if (days.length > 1) {
       const lastDay = days.pop();
-      return `toda ${days.join(', ')} e ${lastDay}`;
+      return `${translations.phrases.every} ${days.join(', ')} ${translations.phrases.and} ${lastDay}`;
     }
   }
 
-  return `no dia da semana ${dayOfWeek}`;
+  return interpolate(translations.phrases.dayOfWeek, { day: dayOfWeek });
 }
 
 /**
- * Constrói a descrição para dias do mês
+ * Build description for days of month
  */
-function buildDayOfMonthDescription(dayOfMonth: string): string {
+function buildDayOfMonthDescription(dayOfMonth: string, translations: CronTranslations): string {
   if (dayOfMonth === '*') {
-    return 'todos os dias';
+    return translations.phrases.everyday;
   }
 
   if (dayOfMonth === '1') {
-    return 'no primeiro dia do mês';
+    return translations.phrases.firstDayOfMonth;
   }
 
-  if (dayOfMonth === '15') {
-    return 'no dia 15 de cada mês';
-  }
-
-  return `no dia ${dayOfMonth} de cada mês`;
+  return interpolate(translations.phrases.dayOfMonth, { day: dayOfMonth });
 }
 
 /**
- * Constrói a descrição para meses
+ * Build description for months
  */
-function buildMonthDescription(month: string): string {
+function buildMonthDescription(month: string, translations: CronTranslations): string {
   if (month === '*') {
-    return 'todos os meses';
+    return translations.phrases.everyday;
   }
 
-  if (MONTHS[month]) {
-    return `em ${MONTHS[month]}`;
+  if (translations.months[month]) {
+    return `${translations.phrases.in} ${translations.months[month]}`;
   }
 
-  return `no mês ${month}`;
+  return interpolate(translations.phrases.month, { month: month });
 }
 
 /**
- * Constrói a descrição do horário
+ * Build time description
  */
-function buildTimeDescription(minute: string, hour: string): string {
+function buildTimeDescription(minute: string, hour: string, translations: CronTranslations): string {
   if (minute === '*' && hour === '*') {
-    return 'a cada minuto';
+    return translations.phrases.everyMinute;
   }
 
   if (minute === '0' && hour !== '*') {
     const hourNum = parseInt(hour);
-    const period = hourNum < 12 ? 'da manhã' : hourNum < 18 ? 'da tarde' : 'da noite';
+    const period = getPeriodOfDay(hourNum, translations);
     const displayHour = hourNum.toString().padStart(2, '0');
-    return `às ${displayHour}:00 ${period}`;
+    return `${translations.phrases.at} ${displayHour}:00 ${period}`;
   }
 
   if (minute !== '*' && hour !== '*') {
     const hourNum = parseInt(hour);
-    const period = hourNum < 12 ? 'da manhã' : hourNum < 18 ? 'da tarde' : 'da noite';
+    const period = getPeriodOfDay(hourNum, translations);
     const displayHour = hourNum.toString().padStart(2, '0');
     const displayMinute = minute.padStart(2, '0');
-    return `às ${displayHour}:${displayMinute} ${period}`;
+    return `${translations.phrases.at} ${displayHour}:${displayMinute} ${period}`;
   }
 
   if (hour === '*' && minute !== '*') {
-    return `aos ${minute} minutos de cada hora`;
+    return interpolate(translations.phrases.minutesOfHour, { minutes: minute });
   }
 
   return '';
+}
+
+/**
+ * Get period of day based on hour
+ */
+function getPeriodOfDay(hour: number, translations: CronTranslations): string {
+  if (hour < TIME_PERIODS.MORNING_END) {
+    return translations.phrases.morning;
+  } else if (hour < TIME_PERIODS.AFTERNOON_END) {
+    return translations.phrases.afternoon;
+  } else {
+    return translations.phrases.night;
+  }
+}
+
+/**
+ * Get list of supported languages
+ * @returns Array of supported language codes
+ */
+export function getSupportedLanguages(): SupportedLanguage[] {
+  return ['pt-BR', 'en-US', 'es-ES', 'fr-FR'];
+}
+
+/**
+ * Legacy function for backward compatibility (Portuguese only)
+ * @deprecated Use explainCron with language parameter instead
+ */
+export function explainCronPt(cronExpression: string): string {
+  return explainCron(cronExpression, 'pt-BR');
 }
