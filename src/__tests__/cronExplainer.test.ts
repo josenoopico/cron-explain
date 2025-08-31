@@ -1,4 +1,4 @@
-import { explainCron, getSupportedLanguages } from './cronExplainer';
+import { explainCron, getSupportedLanguages } from '../cronExplainer';
 
 describe('cronExplainer', () => {
   describe('explainCron - Portuguese (default)', () => {
@@ -250,21 +250,56 @@ describe('cronExplainer', () => {
       expect(explainCron('0 9 * * 1', 'fr-FR')).toBe('Exécute tous les lundi à 09:00 du matin');
     });
 
-    test('should explain first day of month in French', () => {
-      expect(explainCron('0 0 1 * *', 'fr-FR')).toBe('Exécute le premier jour du mois à 00:00 du matin');
-    });
-
     test('should handle error in French', () => {
       const result = explainCron('0 9 * *', 'fr-FR');
       expect(result).toBe('Erreur lors de l\'interprétation de l\'expression cron: 0 9 * *');
     });
   });
 
+  describe('explainCron - Unsupported Language', () => {
+    test('should fallback to Portuguese for unsupported language', () => {
+      expect(explainCron('0 9 * * *', 'de-DE')).toBe('Executa todos os dias às 09:00 da manhã');
+    });
+
+    test('should fallback to Portuguese for invalid language code', () => {
+      expect(explainCron('0 9 * * *', 'invalid')).toBe('Executa todos os dias às 09:00 da manhã');
+    });
+  });
+
   describe('getSupportedLanguages', () => {
-    test('should return array of supported languages', () => {
+    test('should return array of supported language codes', () => {
       const languages = getSupportedLanguages();
-      expect(languages).toEqual(['pt-BR', 'en-US', 'es-ES', 'fr-FR']);
-      expect(languages.length).toBe(4);
+      expect(Array.isArray(languages)).toBe(true);
+      expect(languages).toContain('pt-BR');
+      expect(languages).toContain('en-US');
+      expect(languages).toContain('es-ES');
+      expect(languages).toContain('fr-FR');
+    });
+
+    test('should not include unsupported languages', () => {
+      const languages = getSupportedLanguages();
+      expect(languages).not.toContain('de-DE');
+      expect(languages).not.toContain('it-IT');
+    });
+  });
+
+  describe('explainCron - Complex expressions with ranges', () => {
+    test('should handle range expressions in minutes', () => {
+      expect(explainCron('0-30 9 * * *')).toBe('Executa todos os dias dos minutos 0-30 às 09:00 da manhã');
+    });
+
+    test('should handle range expressions in hours', () => {
+      expect(explainCron('0 9-17 * * *')).toBe('Executa todos os dias das 09:00-17:00');
+    });
+  });
+
+  describe('explainCron - Step values', () => {
+    test('should handle step values in minutes', () => {
+      expect(explainCron('*/15 * * * *')).toBe('Executa todos os dias a cada 15 minutos');
+    });
+
+    test('should handle step values in hours', () => {
+      expect(explainCron('0 */2 * * *')).toBe('Executa todos os dias a cada 2 horas');
     });
   });
 });

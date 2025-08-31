@@ -3,7 +3,7 @@
  */
 
 import { CronTranslations, SupportedLanguage } from './i18n';
-import { getTranslations, interpolate } from './i18n/loader';
+import { getTranslations, interpolate, isLanguageSupported } from './i18n/loader';
 import { defaultConfig, TIME_PERIODS } from './config';
 
 interface CronFields {
@@ -22,14 +22,16 @@ interface CronFields {
  */
 export function explainCron(
   cronExpression: string, 
-  language: SupportedLanguage = defaultConfig.defaultLanguage
+  language: string = defaultConfig.defaultLanguage
 ): string {
   try {
     const fields = parseCronExpression(cronExpression);
-    const translations = getTranslations(language);
+    const validLanguage = isLanguageSupported(language) ? language : defaultConfig.defaultLanguage;
+    const translations = getTranslations(validLanguage as SupportedLanguage);
     return buildDescription(fields, translations);
   } catch (error) {
-    const translations = getTranslations(language);
+    const validLanguage = isLanguageSupported(language) ? language : defaultConfig.defaultLanguage;
+    const translations = getTranslations(validLanguage as SupportedLanguage);
     return `${translations.phrases.errorInterpreting}: ${cronExpression}`;
   }
 }
