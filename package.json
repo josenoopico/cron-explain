@@ -1,10 +1,14 @@
 {
   "name": "cron-explain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert cron expressions into readable phrases",
   "main": "dist/index.js",
   "bin": {
     "cron-explain": "dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josenoopico/cron-explain.git"
   },
   "engines": {
     "node": ">=18.0.0"
