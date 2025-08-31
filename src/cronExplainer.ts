@@ -63,7 +63,11 @@ function buildDescription(fields: CronFields, translations: CronTranslations): s
 
   // Handle step values that affect the main description
   if (fields.minute.startsWith('*/') && fields.hour === '*') {
-    return buildTimeDescription(fields.minute, fields.hour, translations);
+    return `${translations.phrases.executes} ${buildTimeDescription(fields.minute, fields.hour, translations)}`;
+  }
+
+  if (fields.hour.startsWith('*/') && fields.minute === '0') {
+    return `${translations.phrases.executes} ${buildTimeDescription(fields.minute, fields.hour, translations)}`;
   }
 
   // Determine frequency based on fields
@@ -153,13 +157,13 @@ function buildTimeDescription(minute: string, hour: string, translations: CronTr
   // Handle step values in minutes
   if (minute.startsWith('*/') && hour === '*') {
     const stepValue = minute.substring(2);
-    return `${translations.phrases.executes} a cada ${stepValue} minutos`;
+    return `${translations.phrases.everyday} a cada ${stepValue} minutos`;
   }
 
   // Handle step values in hours  
   if (hour.startsWith('*/') && minute === '0') {
     const stepValue = hour.substring(2);
-    return `a cada ${stepValue} horas`;
+    return `${translations.phrases.everyday} a cada ${stepValue} horas`;
   }
 
   // Handle range expressions in minutes
