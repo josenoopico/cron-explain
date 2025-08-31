@@ -61,6 +61,11 @@ function parseCronExpression(cronExpression: string): CronFields {
 function buildDescription(fields: CronFields, translations: CronTranslations): string {
   let description = `${translations.phrases.executes} `;
 
+  // Handle step values that affect the main description
+  if (fields.minute.startsWith('*/') && fields.hour === '*') {
+    return buildTimeDescription(fields.minute, fields.hour, translations);
+  }
+
   // Determine frequency based on fields
   if (fields.dayOfWeek !== '*') {
     description += buildDayOfWeekDescription(fields.dayOfWeek, translations);
@@ -143,6 +148,34 @@ function buildMonthDescription(month: string, translations: CronTranslations): s
 function buildTimeDescription(minute: string, hour: string, translations: CronTranslations): string {
   if (minute === '*' && hour === '*') {
     return translations.phrases.everyMinute;
+  }
+
+  // Handle step values in minutes
+  if (minute.startsWith('*/') && hour === '*') {
+    const stepValue = minute.substring(2);
+    return `${translations.phrases.executes} a cada ${stepValue} minutos`;
+  }
+
+  // Handle step values in hours  
+  if (hour.startsWith('*/') && minute === '0') {
+    const stepValue = hour.substring(2);
+    return `a cada ${stepValue} horas`;
+  }
+
+  // Handle range expressions in minutes
+  if (minute.includes('-') && hour !== '*') {
+    const hourNum = parseInt(hour);
+    const period = getPeriodOfDay(hourNum, translations);
+    const displayHour = hourNum.toString().padStart(2, '0');
+    return `dos minutos ${minute} às ${displayHour}:00 ${period}`;
+  }
+
+  // Handle range expressions in hours
+  if (hour.includes('-') && minute === '0') {
+    const [startHour, endHour] = hour.split('-');
+    const startDisplay = startHour.padStart(2, '0');
+    const endDisplay = endHour.padStart(2, '0');
+    return `das ${startDisplay}:00-${endDisplay}:00`;
   }
 
   if (minute === '0' && hour !== '*') {
