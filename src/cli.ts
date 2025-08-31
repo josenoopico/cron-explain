@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { cronExplain } from './index';
+import { explainCron } from './index';
+
 
 const args = process.argv.slice(2);
 
@@ -19,7 +20,7 @@ if (args.length === 0) {
 const cronExpression = args[0];
 
 try {
-    const explanation = cronExplain(cronExpression);
+    const explanation = explainCron(cronExpression);
     console.log(explanation);
 } catch (error) {
     console.error('Error:', error instanceof Error ? error.message : 'Unknown error');
