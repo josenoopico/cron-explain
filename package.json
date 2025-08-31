@@ -6,6 +6,11 @@
   "bin": {
     "cron-explain": "dist/cli.js"
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/josenoopico/cron-explain.git"
@@ -16,6 +21,7 @@
   "scripts": {
     "build": "tsc && chmod +x dist/cli.js",
     "test": "jest",
+    "prepublishOnly": "npm run build",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "dev": "ts-node src/index.ts",
