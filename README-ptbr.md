@@ -13,75 +13,66 @@ Converter expressões cron em frases legíveis em Português (pt-BR) e outros id
 
 Transforme expressões cron de 5 campos (minuto hora dia-do-mês mês dia-da-semana) em descrições fáceis de entender sobre quando tarefas agendadas serão executadas.
 
+Disponível tanto como biblioteca quanto como ferramenta de linha de comando (CLI).
+
 ## 🚀 Funcionalidades
 
-- Converte expressões cron em texto em Português
-- Suporte a múltiplos idiomas (pt-BR, en-US, es-ES, fr-FR)
-- Interpretação de todos os campos do cron (minuto, hora, dia do mês, mês, dia da semana)
-- Interface simples e intuitiva
+- ✅ Dupla finalidade: use como biblioteca ou CLI
+- ✅ Interface de linha de comando: uso direto no terminal (npx ou instalação global)
+- ✅ Integração como biblioteca: importe no seu projeto Node/TS
+- ✅ Suporte a múltiplos idiomas: pt-BR (padrão), en-US, es-ES, fr-FR
+- ✅ Interpretação completa dos 5 campos padrão do cron
+- ✅ Suporte a TypeScript: definições de tipos completas
+- ✅ Mensagens de erro amigáveis
+- ✅ Zero dependências: leve e rápido
 
 ## 📦 Instalação
 
 Requisitos: Node.js >= 18
 
-- npm:
-  - Instalar: `npm install cron-explain`
-  - Testes (opcional): `npm test`
-  - Build (opcional): `npm run build`
-- yarn:
-  - Instalar: `yarn add cron-explain`
-- pnpm:
-  - Instalar: `pnpm add cron-explain`
+### Como biblioteca (dependência de projeto)
+- npm: `npm install cron-explain`
+- yarn: `yarn add cron-explain`
+- pnpm: `pnpm add cron-explain`
 
-## 📥 Importação e uso básico
+### Como ferramenta CLI
+- Usando npx (sem instalar): `npx cron-explain "0 9 * * 1"`
+- Instalação global: `npm i -g cron-explain` e depois `cron-explain "0 9 * * 1"`
+- A partir de instalação local do projeto: `npx cron-explain "30 14 * * *"`
+
+## 📥 Uso como biblioteca
 
 - ECMAScript Modules (ESM):
   - `import { explainCron } from 'cron-explain';`
 - CommonJS:
   - `const { explainCron } = require('cron-explain');`
 
-Uso básico:
+Exemplo básico:
 
 ```ts
 import { explainCron } from 'cron-explain';
 
 // pt-BR é o idioma padrão
 const frasePt = explainCron('0 9 * * 1');
-console.log(frasePt); // "Executa toda segunda-feira às 09:00 da manhã"
+console.log(frasePt); // ex.: "Executa toda segunda-feira às 09:00 da manhã"
 
 // Passando idioma explicitamente
 const fraseEn = explainCron('30 14 * * *', 'en-US');
-console.log(fraseEn);
+console.log(fraseEn); // ex.: "Runs every day at 02:30 PM"
 ```
 
-## 🧪 Exemplos de uso (TypeScript e JavaScript)
+## 🖥️ Uso como CLI
 
-TypeScript:
-```ts
-import { explainCron, getSupportedLanguages } from 'cron-explain';
+A CLI aceita uma única expressão cron e imprime a explicação (idioma padrão: pt-BR).
 
-const examples = [
-  '*/15 * * * *', // a cada 15 minutos
-  '0 */2 * * *',  // a cada 2 horas
-  '0 9 * * 1',    // toda segunda às 09:00
-  '30 14 * * *',  // diariamente às 14:30
-  '0 6 1 * *',    // dia 1 de cada mês às 06:00
-];
+- Básico:
+  - `cron-explain "0 */2 * * *"`
+  - `cron-explain "30 14 * * 1-5"`
+  - `cron-explain "0 0 1 * *"`
 
-for (const exp of examples) {
-  console.log(exp, '=>', explainCron(exp, 'pt-BR'));
-}
+Se executado sem argumentos, o comando mostra instruções de uso.
 
-console.log('Idiomas suportados:', getSupportedLanguages());
-```
-
-JavaScript (CommonJS):
-```js
-const { explainCron, getSupportedLanguages } = require('cron-explain');
-
-console.log(explainCron('*/10 * * * *')); // a cada 10 minutos
-console.log(getSupportedLanguages());
-```
+Observação: a CLI usa o idioma padrão (pt-BR). Para outros idiomas, prefira a API da biblioteca.
 
 ## ⏱️ Exemplos de diferentes expressões cron
 
@@ -98,14 +89,21 @@ Observação: esta biblioteca trabalha com expressões cron de 5 campos.
 
 ## 📚 Documentação básica da API
 
-- explainCron(cronExpression: string, language?: SupportedLanguage): string
+- `explainCron(cronExpression: string, language?: SupportedLanguage): string`
   - Converte a expressão cron em uma frase no idioma informado (padrão: 'pt-BR').
-- explainCronPt(cronExpression: string): string [deprecated]
-  - Mantida por compatibilidade; prefira explainCron.
-- getSupportedLanguages(): SupportedLanguage[]
+- `explainCronPt(cronExpression: string): string` [deprecated]
+  - Mantida por compatibilidade; prefira `explainCron`.
+- `getSupportedLanguages(): SupportedLanguage[]`
   - Retorna os códigos de idiomas suportados.
-- Tipos exportados: SupportedLanguage, CronTranslations, CronExplainerConfig
-- Utilidades: getTranslations(language), isLanguageSupported(language), defaultConfig
+- Tipos exportados: `SupportedLanguage`, `CronTranslations`, `CronExplainerConfig`
+- Utilidades: `getTranslations(language)`, `isLanguageSupported(language)`, `defaultConfig`
+
+## 🧑‍💻 Desenvolvimento
+- Build: `npm run build`
+- Rodar a CLI em dev: `npm run dev:cli` (requer ts-node)
+- Testes: `npm test`
+- Testes em modo watch: `npm run test:watch`
+- Cobertura: `npm run test:coverage`
 
 ## 📄 Licença
 
