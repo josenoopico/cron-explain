@@ -1,26 +1,11 @@
 {
   "name": "cron-explain",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "typescript": "^5.5.3"
-  },
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.x"
-  },
-  "private": true
-}
-{
-  "name": "cron-explain",
-  "version": "1.0.0",
   "description": "Convert cron expressions into readable phrases in Portuguese",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -34,7 +19,7 @@
     "typescript",
     "portuguese"
   ],
-  "author": "",
+  "author": "jose@noopico.com",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.5",
