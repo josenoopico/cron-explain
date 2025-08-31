@@ -72,5 +72,4 @@ yarn-error.log*
 
 .vscode/*
 .idea/
-.ai/
 dist/
