@@ -11,7 +11,9 @@ Convert cron expressions into readable phrases in Portuguese (pt-BR) and other s
 
 ## 📋 Description
 
-Transform 5-field cron expressions (minute hour day-of-month month day-of-week) into easy-to-understand descriptions of when scheduled tasks will run.
+Transform cron expressions into easy-to-understand descriptions of when scheduled tasks will run.
+
+Supports both standard 5-field cron expressions (minute hour day-of-month month day-of-week) and node-cron 6-field format (second minute hour day-of-month month day-of-week), following the [node-cron](https://github.com/kelektiv/node-cron) specification.
 
 Available as both a library and a command-line tool.
 
@@ -21,7 +23,7 @@ Available as both a library and a command-line tool.
 - ✅ Command-line interface: direct terminal usage (npx or global install)
 - ✅ Library integration: import into your Node/TS projects
 - ✅ Multi-language support: en-US (default), pt-BR, es-ES, fr-FR
-- ✅ Complete cron parsing: all 5 standard fields supported
+- ✅ Complete cron parsing: supports both 5-field standard cron and 6-field node-cron formats
 - ✅ TypeScript support: full type definitions
 - ✅ Helpful error messages
 - ✅ Zero dependencies: lightweight and fast
@@ -75,6 +77,8 @@ If you run without arguments, it shows usage help.
 Note: Current CLI uses the default language (en-US). For other languages, prefer using the library API.
 
 ## ⏱️ Examples of cron expressions
+
+### 5-field standard cron format (minute hour day-of-month month day-of-week)
 - Every 5 minutes: `*/5 * * * *`
 - Every 2 hours (at the top of the hour): `0 */2 * * *`
 - Every day at 14:30: `30 14 * * *`
@@ -84,7 +88,15 @@ Note: Current CLI uses the default language (en-US). For other languages, prefer
 - Hour range (at the top of each hour): `0 9-17 * * 1-5` (from 09:00 to 17:00, Mon–Fri)
 - Specific days of the week: `0 12 * * 1,3,5` (Mon, Wed, and Fri at noon)
 
-Note: This library works with 5-field cron expressions.
+### 6-field node-cron format (second minute hour day-of-month month day-of-week)
+- Every 30 seconds: `*/30 * * * * *`
+- Every minute at 15 seconds: `15 * * * * *`
+- Every 5 minutes at 0 seconds: `0 */5 * * * *`
+- Every day at 14:30:45: `45 30 14 * * *`
+- Every Monday at 09:00:30: `30 0 9 * * 1`
+- Every 10 seconds on weekdays: `*/10 * * * * 1-5`
+
+Note: This library works with both 5-field standard cron expressions and 6-field node-cron format expressions.
 
 ## 📚 Basic API
 - `explainCron(cronExpression: string, language?: SupportedLanguage): string`

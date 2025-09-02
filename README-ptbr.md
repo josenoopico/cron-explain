@@ -11,7 +11,9 @@ Converter expressões cron em frases legíveis em Português (pt-BR) e outros id
 
 ## 📋 Descrição
 
-Transforme expressões cron de 5 campos (minuto hora dia-do-mês mês dia-da-semana) em descrições fáceis de entender sobre quando tarefas agendadas serão executadas.
+Transforme expressões cron em descrições fáceis de entender sobre quando tarefas agendadas serão executadas.
+
+Suporta tanto expressões cron padrão de 5 campos (minuto hora dia-do-mês mês dia-da-semana) quanto o formato node-cron de 6 campos (segundo minuto hora dia-do-mês mês dia-da-semana), seguindo a especificação do [node-cron](https://github.com/kelektiv/node-cron).
 
 Disponível tanto como biblioteca quanto como ferramenta de linha de comando (CLI).
 
@@ -21,7 +23,7 @@ Disponível tanto como biblioteca quanto como ferramenta de linha de comando (CL
 - ✅ Interface de linha de comando: uso direto no terminal (npx ou instalação global)
 - ✅ Integração como biblioteca: importe no seu projeto Node/TS
 - ✅ Suporte a múltiplos idiomas: en-US (padrão), pt-BR, es-ES, fr-FR
-- ✅ Interpretação completa dos 5 campos padrão do cron
+- ✅ Interpretação completa: suporta tanto cron padrão de 5 campos quanto formato node-cron de 6 campos
 - ✅ Suporte a TypeScript: definições de tipos completas
 - ✅ Mensagens de erro amigáveis
 - ✅ Zero dependências: leve e rápido
@@ -76,6 +78,7 @@ Observação: a CLI usa o idioma padrão (en-US). Para outros idiomas, prefira a
 
 ## ⏱️ Exemplos de diferentes expressões cron
 
+### Formato cron padrão de 5 campos (minuto hora dia-do-mês mês dia-da-semana)
 - A cada 5 minutos: `*/5 * * * *`
 - A cada 2 horas (na virada da hora): `0 */2 * * *`
 - Todos os dias às 14:30: `30 14 * * *`
@@ -85,7 +88,15 @@ Observação: a CLI usa o idioma padrão (en-US). Para outros idiomas, prefira a
 - Intervalo de horas (de hora cheia): `0 9-17 * * 1-5` (das 09:00 às 17:00, seg–sex)
 - Dias específicos da semana: `0 12 * * 1,3,5` (seg, qua e sex ao meio-dia)
 
-Observação: esta biblioteca trabalha com expressões cron de 5 campos.
+### Formato node-cron de 6 campos (segundo minuto hora dia-do-mês mês dia-da-semana)
+- A cada 30 segundos: `*/30 * * * * *`
+- A cada minuto aos 15 segundos: `15 * * * * *`
+- A cada 5 minutos aos 0 segundos: `0 */5 * * * *`
+- Todos os dias às 14:30:45: `45 30 14 * * *`
+- Toda segunda-feira às 09:00:30: `30 0 9 * * 1`
+- A cada 10 segundos em dias úteis: `*/10 * * * * 1-5`
+
+Observação: esta biblioteca trabalha tanto com expressões cron padrão de 5 campos quanto com o formato node-cron de 6 campos.
 
 ## 📚 Documentação básica da API
 
