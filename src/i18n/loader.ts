@@ -20,7 +20,7 @@ const translations: Record<SupportedLanguage, CronTranslations> = {
  * @returns CronTranslations object for the specified language
  */
 export function getTranslations(language: SupportedLanguage): CronTranslations {
-  return translations[language] || translations['pt-BR'];
+  return translations[language] || translations['en-US'];
 }
 
 /**

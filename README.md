@@ -20,7 +20,7 @@ Available as both a library and a command-line tool.
 - ✅ Dual functionality: use as a library or a CLI
 - ✅ Command-line interface: direct terminal usage (npx or global install)
 - ✅ Library integration: import into your Node/TS projects
-- ✅ Multi-language support: pt-BR (default), en-US, es-ES, fr-FR
+- ✅ Multi-language support: en-US (default), pt-BR, es-ES, fr-FR
 - ✅ Complete cron parsing: all 5 standard fields supported
 - ✅ TypeScript support: full type definitions
 - ✅ Helpful error messages
@@ -52,18 +52,18 @@ Basic usage:
 ```ts
 import { explainCron } from 'cron-explain';
 
-// pt-BR is the default language
-const phrasePt = explainCron('0 9 * * 1');
-console.log(phrasePt); // e.g. "Executa toda segunda-feira às 09:00 da manhã"
+// en-US is the default language
+const phraseEnDefault = explainCron('0 9 * * 1');
+console.log(phraseEnDefault); // e.g. "Runs every Monday at 09:00 AM"
 
 // Specify language explicitly
-const phraseEn = explainCron('30 14 * * *', 'en-US');
-console.log(phraseEn); // e.g. "Runs every day at 02:30 PM"
+const phrasePt = explainCron('30 14 * * *', 'pt-BR');
+console.log(phrasePt); // e.g. "Executa todos os dias às 14:30 da tarde"
 ```
 
 ## 🖥️ Usage as a CLI
 
-The CLI accepts a single cron expression and prints the explanation (default language: pt-BR).
+The CLI accepts a single cron expression and prints the explanation (default language: en-US).
 
 - Basic:
   - `cron-explain "0 */2 * * *"`
@@ -72,7 +72,7 @@ The CLI accepts a single cron expression and prints the explanation (default lan
 
 If you run without arguments, it shows usage help.
 
-Note: Current CLI uses the default language (pt-BR). For other languages, prefer using the library API.
+Note: Current CLI uses the default language (en-US). For other languages, prefer using the library API.
 
 ## ⏱️ Examples of cron expressions
 - Every 5 minutes: `*/5 * * * *`
@@ -88,7 +88,7 @@ Note: This library works with 5-field cron expressions.
 
 ## 📚 Basic API
 - `explainCron(cronExpression: string, language?: SupportedLanguage): string`
-  - Converts the cron expression into a phrase in the specified language (default: 'pt-BR').
+  - Converts the cron expression into a phrase in the specified language (default: 'en-US').
 - `explainCronPt(cronExpression: string): string` [deprecated]
   - Maintained for compatibility; prefer `explainCron`.
 - `getSupportedLanguages(): SupportedLanguage[]`
