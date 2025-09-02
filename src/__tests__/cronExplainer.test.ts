@@ -143,9 +143,9 @@ describe('cronExplainer', () => {
         expect(result).toBe('Erro ao interpretar a expressão cron: 0 9 * *');
       });
 
-      test('should return error message for expression with many fields', () => {
+      test('should support 6-field node-cron format (seconds field)', () => {
         const result = explainCron('0 9 * * * *');
-        expect(result).toBe('Erro ao interpretar a expressão cron: 0 9 * * * *');
+        expect(result).toBe('Executa todos os dias aos 9 minutos de cada hora');
       });
 
       test('should return error message for empty expression', () => {

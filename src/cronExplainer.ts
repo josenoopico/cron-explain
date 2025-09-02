@@ -38,21 +38,37 @@ export function explainCron(
 
 /**
  * Parse cron expression into individual fields
+ * Supports:
+ * - Standard cron: 5 fields (minute hour dayOfMonth month dayOfWeek)
+ * - node-cron: 6 fields (second minute hour dayOfMonth month dayOfWeek)
  */
 function parseCronExpression(cronExpression: string): CronFields {
   const parts = cronExpression.trim().split(/\s+/);
 
-  if (parts.length !== 5) {
-    throw new Error('Cron expression must have exactly 5 fields');
+  if (parts.length === 5) {
+    // Standard cron format (minute hour dayOfMonth month dayOfWeek)
+    return {
+      minute: parts[0],
+      hour: parts[1],
+      dayOfMonth: parts[2],
+      month: parts[3],
+      dayOfWeek: parts[4]
+    };
   }
 
-  return {
-    minute: parts[0],
-    hour: parts[1],
-    dayOfMonth: parts[2],
-    month: parts[3],
-    dayOfWeek: parts[4]
-  };
+  if (parts.length === 6) {
+    // node-cron format (second minute hour dayOfMonth month dayOfWeek)
+    // We currently ignore the seconds field for description purposes
+    return {
+      minute: parts[1],
+      hour: parts[2],
+      dayOfMonth: parts[3],
+      month: parts[4],
+      dayOfWeek: parts[5]
+    };
+  }
+
+  throw new Error('Cron expression must have 5 (cron) or 6 (node-cron) fields');
 }
 
 /**

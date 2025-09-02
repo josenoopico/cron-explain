@@ -4,7 +4,7 @@ import { CronExplainerConfig, SupportedLanguage } from './i18n';
  * Default configuration for CronExplainer
  */
 export const defaultConfig: CronExplainerConfig = {
-  defaultLanguage: 'en-US' as SupportedLanguage,
+  defaultLanguage: 'pt-BR' as SupportedLanguage,
   timeFormat: '24h'
 };
 
