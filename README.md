@@ -65,16 +65,24 @@ console.log(phrasePt); // e.g. "Executa todos os dias às 14:30 da tarde"
 
 ## 🖥️ Usage as a CLI
 
-The CLI accepts a single cron expression and prints the explanation (default language: en-US).
+The CLI accepts a single cron expression and prints the explanation.
 
 - Basic:
   - `cron-explain "0 */2 * * *"`
   - `cron-explain "30 14 * * 1-5"`
   - `cron-explain "0 0 1 * *"`
 
-If you run without arguments, it shows usage help.
+- Language:
+  - Use `-l` or `--lang` to select the output language.
+  - Supported: `en-US` (default), `pt-BR`, `es-ES`, `fr-FR`
+  - Examples:
+    - `cron-explain -l pt-BR "30 14 * * 1-5"`
+    - `cron-explain --lang en-US "0 0 1 * *"`
 
-Note: Current CLI uses the default language (en-US). For other languages, prefer using the library API.
+- Help:
+  - `cron-explain -h`
+
+If you run without arguments, it shows usage help.
 
 ## ⏱️ Examples of cron expressions
 

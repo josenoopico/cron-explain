@@ -65,16 +65,24 @@ console.log(frasePt); // ex.: "Executa todos os dias às 14:30 da tarde"
 
 ## 🖥️ Uso como CLI
 
-A CLI aceita uma única expressão cron e imprime a explicação (idioma padrão: en-US).
+A CLI aceita uma única expressão cron e imprime a explicação.
 
 - Básico:
   - `cron-explain "0 */2 * * *"`
   - `cron-explain "30 14 * * 1-5"`
   - `cron-explain "0 0 1 * *"`
 
-Se executado sem argumentos, o comando mostra instruções de uso.
+- Idioma:
+  - Use `-l` ou `--lang` para selecionar o idioma de saída.
+  - Suportados: `en-US` (padrão), `pt-BR`, `es-ES`, `fr-FR`
+  - Exemplos:
+    - `cron-explain -l pt-BR "30 14 * * 1-5"`
+    - `cron-explain --lang en-US "0 0 1 * *"`
 
-Observação: a CLI usa o idioma padrão (en-US). Para outros idiomas, prefira a API da biblioteca.
+- Ajuda:
+  - `cron-explain -h`
+
+Se executado sem argumentos, o comando mostra instruções de uso.
 
 ## ⏱️ Exemplos de diferentes expressões cron
 
